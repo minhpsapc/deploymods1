@@ -13,10 +13,10 @@
 # limitations under the License.
 # [START cloudbuild_maven]
 steps:
-  - name: maven:3.8.4-jdk-17
+  - name: maven:3.8.4-openjdk-17-slim
     entrypoint: mvn
     args: ["test"]
-  - name: maven:3.8.4-jdk-17
+  - name: maven:3.8.4-openjdk-17-slim
     entrypoint: mvn
     args: ["package", "-Dmaven.test.skip=true"]
   - name: gcr.io/cloud-builders/docker

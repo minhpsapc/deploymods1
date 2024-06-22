@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/admin_layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product</title>
+</head>
+
+<body>
+  <div layout:fragment="admin_content">
+
+    <!-- Add product form -->
+    <div class="container w-75 mt-5">
+      <h3 class="mb-3"><b>ADD PRODUCT</b></h3>
+      <div class="alert alert-success" th:if="${addProductSuccess}" th:text="${addProductSuccess}">
+
+      </div>
+      <form th:action="@{/admin/products/addProduct}" method="post" th:object="${product}"
+        enctype="multipart/form-data">
+        <div class="form-group mb-3">
+          <label for="name">Name</label>
+          <input type="text" th:class="${ProductNameExists}? 'form-control is-invalid' : 'form-control' "
+            class="form-control" id="name" value="" placeholder="Product name" th:field="*{name}"
+            onchange="this.form.action='/admin/products/updateAddProductForm'; this.form.submit();" required>
+          <!-- <span th:text="${ProductNameExists}"></span> -->
+          <div th:if="${ProductNameExists}" id="name" class="invalid-feedback">
+            Product name already exists.
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Select MAKE and MODEL -->
+
+          <div class="col-md-4">
+            <label class="form-label" for="make">Make</label>
+            <select class="form-select mb-3" id="make" name="make" required>
+              <option value="">Select Make</option>
+              <option value="Audi">Audi</option>
+              <option value="BMW">BMW</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label" for="model">Model</label>
+            <select class="form-select mb-3" id="model" name="model" required>
+              <option value="">Select Model</option>
+            </select>
+          </div>
+
+          <div class="form-group mb-3 col-md-4">
+            <label class="form-label" for="category">Category</label>
+            <select class="form-select" id="category" th:field="*{category}" required>
+              <option value="" hidden></option>
+              <option value="Coilovers">Coilovers</option>
+              <option value="Turbo">Turbo</option>
+              <option value="Brakes">Brakes</option>
+              <option value="Oils">Oils</option>
+              <option value="Batteries">Batteries</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="description">Description</label>
+          <textarea class="form-control" id="description" rows="3" th:field="*{description}" required></textarea>
+        </div>
+
+        <div class="row">
+          <div class="form-group mb-3 col-md-6">
+            <label for="stock">Stock</label>
+            <input class="form-control" type="number" name="stock" th:value="1" min="1" max="100" th:field="*{stock}">
+          </div>
+
+          <div class="form-group mb-3 col-md-6">
+            <label for="price">Price</label>
+            <input type="text" class="form-control" id="price" placeholder="Price" th:field="*{price}" required>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <input class="form-control" type="file" name="file" id="file" accept="image/*">
+          <label class="input-group-text" for="file">Upload Image (max 1MB)</label>
+        </div>
+
+        <input type="hidden" th:field="*{rating}" th:value="0.00">
+
+        <button type="submit" th:class="${ProductNameExists}? 'btn btn-primary my-3 btn-dark' : 'btn btn-primary my-3' "
+          th:disabled="${ProductNameExists}">Add product</button>
+
+      </form>
+    </div>
+  </div>
+
+  <div layout:fragment="admin_scripts">
+    <script th:inline="javascript">
+      // Map of make and model
+      const makeModelsMap = {
+        'Audi': ['A5', 'Q5', 'S5'],
+        'BMW': ['Z4', 'X5', 'M4']
+      };
+
+      // Get the make and model select elements
+      const makeSelect = document.getElementById('make');
+      const modelSelect = document.getElementById('model');
+
+      // Disable the model select and set make select to first option ('Select Make')
+      modelSelect.disabled = true;
+      makeSelect.selectedIndex = 0;
+
+      // Add an event listener to the make select element
+      makeSelect.addEventListener('change', function () {
+        // Clear the model selection
+        modelSelect.innerHTML = '<option value="">Select Model</option>';
+
+        // Get the selected make
+        const selectedMake = this.value;
+
+        // If a make is selected then generate the mapped models
+        if (selectedMake !== '') {
+          modelSelect.disabled = false;
+          const models = makeModelsMap[selectedMake];
+          models.forEach(function (model) {
+            const option = document.createElement('option');
+            option.value = model;
+            option.innerHTML = model;
+            modelSelect.appendChild(option);
+          });
+        }
+        else {
+          modelSelect.disabled = true;
+          modelSelect.selectedIndex = -1;
+        }
+      });
+    </script>
+  </div>
+</body>
+
+</html>

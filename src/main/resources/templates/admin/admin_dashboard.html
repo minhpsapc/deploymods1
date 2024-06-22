@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/admin_layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <div layout:fragment="admin_content">
+        <div class="container w-100 mt-5 d-flex flex-column justify-content-between">
+            <h3 class="mb-2"><b>Dashboard</b></h3>
+
+            <div class="d-flex flex-column flex-lg-row  justify-content-lg-between align-items-center">
+                <div class="row w-100">
+                    <div class="col-lg-4 p-2">
+                        <div class="card dashboard-card-sm h-100 text-bg-primary">
+                            <div class="card-header h4"><i class="bi bi-credit-card"></i> Orders</div>
+                            <div class="card-body pt-2 pb-0">
+                              <h1 class="card-title" th:text="${#lists.size(monthlyOrders)}"></h1>
+                            </div>
+                            <div class="card-footer bg-primary border-0 mb-1">Total for this month</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 p-2">
+                        <div class="card dashboard-card-sm h-100 text-white bg-info">
+                            <div class="card-header h4"><i class="bi bi-gear"></i> Processing</div>
+                            <div class="card-body pt-2 pb-0">
+                                <h1 class="card-title" th:text="${#lists.size(processingOrders)}"></h1>
+                            </div>
+                            <div class="card-footer bg-info border-0 mb-1">Total for this month</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 p-2">
+                        <a th:href="@{/admin/products}" class="text-decoration-none">
+                            <div class="card dashboard-card-sm h-100 text-dark bg-secondary-subtle shadow-lg">
+                                <div class="card-header h4 border-0 bg-secondary-subtle"><i class="bi bi-stack"></i> Stock</div>
+                                <div class="card-body pt-2 pb-0">
+                                  <div th:if="${outOfStock}" class="alert alert-danger py-1">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                      <span class="card-text" th:if="${outOfStock}" th:text="${outOfStock}"></span>
+                                      <span th:text="${outOfStock} eq 1 ? ' product' : ' products' "></span>
+                                      <span> out of stock</span>
+                                  </div>
+                                  <div th:if="${lowStock}" class="alert alert-info py-1">
+                                    <i class="bi bi-exclamation-diamond-fill"></i>
+                                      <span class="card-text" th:if="${lowStock}" th:text="${lowStock}"></span>
+                                      <span th:text="${lowStock} eq 1 ? ' product' : ' products' "></span>
+                                      <span> low in stock</span>
+                                  </div>
+                                  <div th:if="${outOfStock eq 0}" class="alert alert-success py-1">
+                                    <i class="bi bi-check2-square"></i>
+                                      <span>All products are in stock!</span>
+                                  </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 p-2">
+                        <div class="card dashboard-card-sm h-100 text-bg-success">
+                            <div class="card-header h4"><i class="bi bi-check-circle"></i> Delivered</div>
+                            <div class="card-body pt-2 pb-0">
+                                <h1 class="card-title" th:text="${#lists.size(deliveredOrders)}"></h1>
+                            </div>
+                            <div class="card-footer bg-success border-0 mb-1">Total for this month</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 p-2">
+                        <div class="card dashboard-card-sm h-100 text-bg-danger">
+                            <div class="card-header h4"><i class="bi bi-x-circle"></i> Cancellations</div>
+                            <div class="card-body pt-2 pb-0">
+                                <h1 class="card-title" th:text="${#lists.size(cancelledOrders)}"></h1>
+                            </div>
+                            <div class="card-footer bg-danger border-0 mb-1">Total for this month</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 p-2">
+                        <div class="card dashboard-card-sm h-100 text-white bg-light-green">
+                            <div class="card-header h4"><i class="bi bi-bank2"></i> Revenue</div>
+                            <div class="card-body pt-2 pb-0">
+                              <h1 class="card-title" th:text="${#numbers.formatCurrency(monthlyRevenue)}"></h1>
+                            </div>
+                            <div class="card-footer bg-light-green border-0 mb-1">Total for this month</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column flex-lg-row  justify-content-lg-between align-items-center">
+                <div class="row w-100">
+                    <div class="col-lg-8 p-2">
+                        <div class="card dashboard-card-lg w-100 mb-3">
+                            <div class="card-header h4 bg-white"><i class="bi bi-clipboard-data"></i> Sales Analytics</div>
+                            <div class="card-body">
+                              <div>
+                                <canvas id="myChart" class="w-100 h-100"></canvas>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 p-2">
+                        <div class="card dashboard-card-sm mb-3">
+                            <div class="card-header h4"><i class="bi bi-star"></i> Recent Reviews</div>
+                            <div class="card-body">
+                                <div th:each="review : ${recentReviews}" class="row">
+                                    <span class="text-secondary" th:text="${#strings.capitalize(review.user.name)} ">User's name</span>
+                                    <div>
+                                        <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                            <i th:class="${{review.rating}} ge ${#numbers.formatDecimal(i,1,1)} - 0.5 ? 'bi bi-star-fill' : 'bi bi-star'"></i>
+                                        </span>
+                                    </div>
+                                    <span th:text="${review.product.name}"></span>
+                                    <div>
+                                        <span th:text="'Reviewed on ' + ${#temporals.format(review.dateCreated, 'dd MMMM yyyy')}" class="text-secondary"></span>
+                                        <span class="text-success ms-lg-3">Verified purchase <i class="bi bi-check-circle"></i></span>
+                                    </div>
+                                    <p class="text-black" th:text="${review.comment}"></p>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            
+        </div>
+    </div>
+
+    <div layout:fragment="admin_scripts">
+      <!-- Create the key and value arrays for the x and y axis in the chart from the ordersByDate map -->
+      
+      <script th:inline="javascript">
+        let dates = /*[[${dates}]]*/ [];
+        let quantities = /*[[${quantities}]]*/ [];
+        console.log(dates)
+        console.log(quantities)
+
+        let ctx = document.getElementById('myChart').getContext('2d');
+        let myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Orders by date',
+                    data: quantities,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 3,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            displayFormats: {
+                                day: 'MMM D'
+                            }
+                        },
+                        distribution: 'linear'
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        fontColor: '#333',
+                        fontSize: 14
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Orders by date',
+                    fontSize: 18
+                }
+            }
+        });
+
+    </script>
+    
+
+    </div>
+
+</body>
+</html>

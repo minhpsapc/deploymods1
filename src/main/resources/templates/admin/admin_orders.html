@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/admin_layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+</head>
+
+<body>
+    <div layout:fragment="admin_content">
+        <!-- List of all orders -->
+        <div class="d-flex flex-column container mt-5">
+            <h3 class="mb-4"><b>Orders</b></h3>
+
+            <!-- Filters -->
+            <div class="row">
+                <div class="col-auto">
+                    <form th:action="@{/admin/orders}" method="get">
+                        <div class="row g-3 mb-3">
+                            <div class="col-auto">
+                                <div>
+                                    <label for="status" class="form-label">Filter by status:</label>
+                                    <select class="form-select" id="status" name="status">
+                                        <option value="">All</option>
+                                        <option th:each="status : ${orderStatusEnum}"
+                                                th:value="${status}"
+                                                th:text="${status}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-auto align-self-end">
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-auto">
+                    <form action="#" th:action="@{/admin/orders}" th:method="get">
+                        <div class="row g-3 mb-3">
+                            <div class="col-auto">
+                                <div>
+                                    <label for="search" class="form-label">Search order</label>
+                                    <input class="form-control" th:value="${search}" type="text" name="search" placeholder="Search by keyword">
+                                </div>
+                            </div>
+                            <div class="col-auto align-self-end">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+              
+            
+            <!-- Orders -->
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>User</th>
+                        <th>Date created</th>
+                        <th>Products</th>
+                        <th>Total price</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr th:each="order : ${orders}">
+                        <form action="#" method="post" th:action="@{/admin/orders/updateStatus}">
+                            <input type="hidden" th:name="orderId" th:value="${order.id}">
+                            <td th:text="${order.id}"></td>
+                            <td class="text-capitalize" th:text="${order.user.name}"></td>
+                            <td th:text="${order.dateCreated}"></td>
+                            <td>
+                                <div th:each="orderProduct : ${order.orderProducts}">
+                                    <p th:text="${orderProduct.product.name}"></p>
+                                </div>
+                            </td>
+                            <td th:text="'£' + ${order.totalPrice}"></td>
+                            <td>
+                                <select th:name="orderStatus" class="form-select"
+                                        th:classappend="
+                                           ${#strings.equals(order.status, 'DELIVERED')}    ? 'border-success bg-success-subtle text-success'
+                                        : (${#strings.equals(order.status, 'CANCELLED')}    ? 'border-danger bg-danger-subtle text-danger'
+                                        : (${#strings.equals(order.status, 'ORDERED')}      ? 'border-info bg-info-subtle text-info'))">
+                                    <option th:each="status : ${orderStatusEnum}"
+                                            th:value="${status}"
+                                            th:text="${status}"
+                                            th:selected="${status == order.status}"></option>
+                                </select>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-outline-dark">Update</button>
+                            </td>
+                        </form>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

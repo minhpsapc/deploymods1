@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basket</title>
+</head>
+
+<body>
+    
+    <div layout:fragment="content">
+        <!-- If the basket is not empty -->
+        <div th:if="${not #lists.isEmpty(products)}">
+            <div class="container my-5">
+                <div class="row">
+                    <div class="col-lg-8 mb-5">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-header border-0">
+                                <h2 class="card-title pt-2">Your Basket</h2>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="basketProduct : ${products}">
+                                            <td class="w-50">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <img th:src="${basketProduct.product.image}" class="img-thumbnail border-0" alt="Product Image">
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="row h4" th:text="${basketProduct.product.name}"></div>
+                                                        <div class="row" th:text="'Make: ' + ${basketProduct.product.make}"></div>
+                                                        <div class="row" th:text="'Model: ' + ${basketProduct.product.model}"></div>
+                                                        <div class="row" th:text="'Category: ' + ${basketProduct.product.category}"></div>
+                                                        <div class="row mt-2">
+                                                            <div class="col p-0">
+                                                                <a class="text-decoration-none link-secondary" th:href="@{basket/removeProduct/{id}(id=${basketProduct.id})}"><i class="bi bi-x-lg"></i> Remove item</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="h4">
+                                                <span class="flex-row">
+                                                    <a class="link-dark text-decoration-none" th:if="${basketProduct.quantity > 1}"
+                                                        th:href="@{basket/reduce/{id}(id=${basketProduct.product.id})}">
+                                                        <i class="bi bi-dash"></i>
+                                                     </a>
+                                                     <a class="link-dark text-decoration-none" th:if="${basketProduct.quantity <= 1}"
+                                                        th:href="@{basket/removeProduct/{id}(id=${basketProduct.id})}">
+                                                        <i class="bi bi-dash"></i>
+                                                     </a>
+                                                </span>
+                                                <span class="flex-row mx-2" th:text="${basketProduct.quantity}"></span>
+                                                <span class="flex-row"><a class="link-dark" th:href = "@{basket/addQuantity/{id}(id=${basketProduct.product.id})}"><i class="bi bi-plus-lg"></i></i></a></span>
+                                            </td>
+                                            <td class="h4" th:text="'£' + ${basketProduct.product.price * basketProduct.quantity}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div th:if="${!products.isEmpty()}">
+                                    <form method = "post" action ="#" th:action="@{/basket/clear}" th:object="${basketproduct}">
+                                        <button class="btn btn-outline-danger" type="submit">Clear</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-header border-0">
+                                <h2 class="card-title pt-2">Order Summary</h2>
+                            </div>
+                            <div class="card-body">
+                                <!-- For each loop over all basket products for order summary -->
+                                <div th:each="basketProduct : ${products}">
+                                    <div class="row mb-3">
+                                        <div class="col-9">
+                                            <div class="" th:text="${basketProduct.product.name}"></div>
+                                            <div class="text-secondary" th:text="'Quantity ' + ${basketProduct.quantity}"></div>
+                                        </div>
+                                        <div class="col-3 text-end" th:text="'£' + ${basketProduct.product.price * basketProduct.quantity}"></div>
+                                    </div>
+                                </div>
+                                
+                                <p class="card-text my-4 h4" th:text="'Total ' + '£' + ${total}"></p>
+
+                                <form method = "post" action ="#" th:action="@{/checkout}">
+                                    <button class="btn btn-success" type="submit">Checkout</button>
+                                </form>
+                                <!-- <span th:utext="${errorStock}"></span> -->
+                                <div th:if="${errorStock}">
+                                    <!-- Vertically centered modal -->
+                                    <div class="alert alert-danger mt-4" role="alert">
+                                        <div>Not enough items in stock, please change quantity for item: </div>
+                                        <ul>
+                                            <li>
+                                                <span th:utext="${errorStock} + ' (' + ${errorProduct.product.stock} + ' left)' "></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- If the basket is empty -->
+        <div th:if="${#lists.isEmpty(products)}">
+            <div class="container text-center my-5 justify-content-center d-flex">
+                <div class="card w-50 shadow-lg p-4 border-0">
+                    <div class="card-body">
+                        <h4>Your basket is empty</h4>
+                        <a href="#" class="btn btn-dark" th:href="@{/store}">Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

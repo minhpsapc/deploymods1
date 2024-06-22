@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homepage</title>
+</head>
+
+<body>
+  <div layout:fragment="content">
+    <!-- Banner -->
+    <div id="carousel-banner" class="carousel slide my-4" data-bs-ride="carousel">
+      <div class="carousel-inner rounded-3">
+        <div class="carousel-item active">
+          <!-- <img src="..." th:src="@{/images/img1.jpg}" class="d-block w-100 carousel-banner-img" alt="..."> -->
+          <video autoplay loop muted class="d-block w-100 carousel-banner-img"
+            src="/images/luxury-car-trim.mp4"></video>
+        </div>
+        <div class="carousel-item">
+          <img src="..." th:src="@{/images/white-sports-car.jpg}" class="d-block w-100 carousel-banner-img" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="..." th:src="@{/images/img3.jpg}" class="d-block w-100 carousel-banner-img" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="..." th:src="@{/images/road-night.jpg}" class="d-block w-100 carousel-banner-img" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="..." th:src="@{/images/img1.jpg}" class="d-block w-100 carousel-banner-img" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="..." th:src="@{/images/speedometer.jpg}" class="d-block w-100 carousel-banner-img" alt="...">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carousel-banner" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carousel-banner" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+    <!-- Select make and model -->
+    <p class="h4 text-uppercase text-center">Select your Vehicle</p>
+    <div class="card mb-4">
+      <div class="card-body">
+        <form th:action="@{/store/makeModel}" th:object="${Product}">
+
+          <div class="row">
+            <div class="col-md-5">
+              <label class="form-label" for="make">Make</label>
+              <select class="form-select mb-3" id="make" name="make" required>
+                <option value="">Select Make</option>
+                <option value="Audi">Audi</option>
+                <option value="BMW">BMW</option>
+              </select>
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="model">Model</label>
+              <select class="form-select mb-3" id="model" name="model" required>
+                <option value="">Select Model</option>
+              </select>
+            </div>
+            <div class="col-md-2 align-self-end">
+              <button class="btn btn-primary w-100 my-3" type="submit">Search</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+    <!-- Categories -->
+    <p class="h4 text-uppercase text-center">Product Categories</p>
+
+    <div class=" d-flex flex-wrap justify-content-center mb-4">
+      <div class="card categories-card m-2 text-center">
+        <a href="#" th:href="@{/store/category/{category}(category= 'Coilovers')}"
+          class="text-decoration-none link-dark">
+          <img src="..." th:src="@{/images/Tein Street Basis Z Coilovers.png}" class="card-img-top categories-img"
+            alt="...">
+          <div class="card-body">
+            <p class="card-text h5 text-center">Coilovers</p>
+          </div>
+        </a>
+      </div>
+      <div class="card categories-card m-2 text-center">
+        <a href="#" th:href="@{/store/category/{category}(category = 'Turbo')}" class="text-decoration-none link-dark">
+          <img src="..." th:src="@{/images/turbo1.jpg}" class="card-img-top categories-img" alt="...">
+          <div class="card-body">
+            <p class="card-text h5 text-center">Turbo kits</p>
+          </div>
+        </a>
+      </div>
+      <div class="card categories-card m-2 text-center">
+        <a href="#" th:href="@{/store/category/{category}(category = 'Brakes')}" class="text-decoration-none link-dark">
+          <img src="..." th:src="@{/images/StopTech Trophy Sport Big Brake Kit.png}" class="card-img-top categories-img"
+            alt="...">
+          <div class="card-body">
+            <p class="card-text h5 text-center">Big Brake Kits</p>
+          </div>
+        </a>
+      </div>
+      <div class="card categories-card m-2 text-center">
+        <a href="#" th:href="@{/store/category/{category}(category = 'Oils')}" class="text-decoration-none link-dark">
+          <img src="..." th:src="@{/images/Castrol GTX Engine Oil.jpg}" class="card-img-top categories-img" alt="...">
+          <div class="card-body">
+            <p class="card-text h5 text-center">Engine Oils</p>
+          </div>
+        </a>
+      </div>
+      <div class="card categories-card m-2 text-center">
+        <a href="#" th:href="@{/store/category/{category}(category = 'Batteries')}"
+          class="text-decoration-none link-dark">
+          <img src="..." th:src="@{/images/batt1.jpg}" class="card-img-top categories-img" alt="...">
+          <div class="card-body">
+            <p class="card-text h5 text-center">Batteries</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div layout:fragment="scripts">
+    <script th:inline="javascript">
+      // Map of make and model
+      const makeModelsMap = {
+        'Audi': ['A5', 'Q5', 'S5'],
+        'BMW': ['Z4', 'X5', 'M4']
+      };
+
+      // Get the make and model select elements
+      const makeSelect = document.getElementById('make');
+      const modelSelect = document.getElementById('model');
+
+      // Disable the model select and set make select to first option ('Select Make')
+      modelSelect.disabled = true;
+      makeSelect.selectedIndex = 0;
+
+      // Add an event listener to the make select element
+      makeSelect.addEventListener('change', function () {
+        // Clear the model selection
+        modelSelect.innerHTML = '<option value="">Select Model</option>';
+
+        // Get the selected make
+        const selectedMake = this.value;
+
+        // If a make is selected then generate the mapped models
+        if (selectedMake !== '') {
+          modelSelect.disabled = false;
+          const models = makeModelsMap[selectedMake];
+          models.forEach(function (model) {
+            const option = document.createElement('option');
+            option.value = model;
+            option.innerHTML = model;
+            modelSelect.appendChild(option);
+          });
+        }
+        else {
+          modelSelect.disabled = true;
+          modelSelect.selectedIndex = -1;
+        }
+      });
+    </script>
+  </div>
+</body>
+
+
+
+</html>

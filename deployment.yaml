@@ -7,7 +7,7 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: mods1
+      app: mods
   template:
     metadata:
       labels:

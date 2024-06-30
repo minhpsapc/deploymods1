@@ -2,34 +2,35 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mods-1-deployment
-  namespace: minh-test
+  namespace: minh-test2
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: mods-1
+      app: mods-2
   template:
     metadata:
       labels:
-        app: mods-1
+        app: mods-2
     spec:
       containers:
-      - name: mods-1
+      - name: mods-2
         image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
         ports:
         - containerPort: 8080
       nodeSelector:
         ## This label is used to deploy the pod on matching nodes
-        workload: production-1
+        workload: production-2
+        workload: production-3
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mods-1
-  namespace: minh-test
+  name: mods-2
+  namespace: minh-test2
 spec:
   selector:
-    app: mods-1
+    app: mods-2
   ports:
     - protocol: TCP
       port: 8080

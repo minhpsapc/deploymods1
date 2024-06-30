@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mods-1-deployment
-  namespace: minh-test2
+  namespace: minh-test5
 spec:
   replicas: 2
   selector:

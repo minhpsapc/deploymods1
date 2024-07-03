@@ -19,9 +19,9 @@ spec:
         ports:
         - containerPort: 8080
       tolerations:
-      - key: "key"
+      - key: "taint-key"
         operator: "Equal"
-        value: "value"
+        value: "NoSchedule"
         effect: "NoSchedule"
 ---
 apiVersion: v1

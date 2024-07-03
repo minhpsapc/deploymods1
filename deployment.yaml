@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mods-1-deployment
-  namespace: minh-test2
+  name: mods-3-deployment
+  namespace: taints
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
-      app: mods-2
+      app: mods-3
   template:
     metadata:
       labels:
-        app: mods-2
+        app: mods-3
     spec:
       containers:
-      - name: mods-2
+      - name: mods-3
         image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
         ports:
         - containerPort: 8080
@@ -27,11 +27,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mods-2
+  name: mods-3
   namespace: minh-test2
 spec:
   selector:
-    app: mods-2
+    app: mods-3
   ports:
     - protocol: TCP
       port: 8080

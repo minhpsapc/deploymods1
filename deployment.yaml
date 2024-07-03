@@ -21,7 +21,7 @@ spec:
       tolerations:
       - key: "taint-key"
         operator: "Equal"
-        value: "NoSchedule"
+        taint-value: "NoSchedule"
         effect: "NoSchedule"
 ---
 apiVersion: v1

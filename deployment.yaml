@@ -18,12 +18,12 @@ spec:
         image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
         ports:
         - containerPort: 8080
-# Thêm tolerations nếu cần
-          tolerations:
-            - key: "app"
-              operator: "Equal"
-              value: "frontend"
-              effect: "NoSchedule"
+      tolerations:  # Đưa tolerations vào đây
+        - key: "app"
+          operator: "Equal"
+          value: "frontend"
+          effect: "NoSchedule"
+
 ---
 apiVersion: v1
 kind: Service

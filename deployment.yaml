@@ -14,7 +14,7 @@ spec:
         app: mods
     spec:
       tolerations:  # Đây là nơi để đưa tolerations
-        - key: "app"         # Key của taint mà toleration áp dụng
+        - key: "app2"         # Key của taint mà toleration áp dụng
           operator: "Equal"   # Phép toán so sánh (Equal, Exists, ...)
           value: "frontend"   # Giá trị của taint
           effect: "NoSchedule"  # Tác động của taint (NoSchedule, PreferNoSchedule, NoExecute)

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mods-deployment
-  namespace: doan123
+  namespace: doanminh22
 spec:
   replicas: 1
   selector:
@@ -20,13 +20,14 @@ spec:
         - containerPort: 8080
       nodeSelector:
         workload: production-1
+        disk: ssd
        
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: mods
-  namespace: doan123
+  namespace: doanminh22
 spec:
   selector:
     app: mods

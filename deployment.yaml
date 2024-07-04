@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mods-deployment
-  namespace: taints123
+  namespace: doan123
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
       app: mods-taints
@@ -23,12 +23,16 @@ spec:
           image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
           ports:
             - containerPort: 8080
+ nodeSelector:
+        ## This label is used to deploy the pod on matching nodes
+        workload: production-1
+        disk:ssd
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: mods-taints
-  namespace: taints123
+  namespace: doan123
 spec:
   selector:
     app: mods-1

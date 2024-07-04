@@ -1,36 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mods-tolerations
-  namespace: minhtao
+  name: mods-deployment
+  namespace: minh123
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: mods-3
+      app: mods
   template:
     metadata:
       labels:
-        app: mods-3
-      annotations:  # Thêm phần annotations nếu cần
-        workload: "production-1"
+        app: mods
     spec:
-      tolerations:
-      - key: "app"
-        operator: "Equal"
-        value: "db"
-        effect: "NoSchedule"
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values:
-                - devopsteam-minhkq-k8s-mods-3
       containers:
-      - name: mods-3
-        image: nginx:latest
+      - name: mods
+        image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
+# Thêm tolerations nếu cần
+          tolerations:
+            - key: "app"
+              operator: "Equal"
+              value: "frontend"
+              effect: "NoSchedule"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mods
+  namespace: minh123
+spec:
+  selector:
+    app: mods
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP

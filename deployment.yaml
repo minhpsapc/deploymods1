@@ -18,6 +18,7 @@ spec:
         operator: "Equal"
         value: "db"
         effect: "NoSchedule"
+       workload: production-1
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

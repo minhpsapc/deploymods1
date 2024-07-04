@@ -26,7 +26,7 @@ spec:
  nodeSelector:
         ## This label is used to deploy the pod on matching nodes
         workload: production-1
-        disk:ssd
+        disk=ssd
 ---
 apiVersion: v1
 kind: Service

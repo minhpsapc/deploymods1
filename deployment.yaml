@@ -14,12 +14,9 @@ spec:
         app: mods-3
     spec:
       tolerations:
-      - key: "taint-key"
+      - key: "app"
         operator: "Equal"
-        value: "NoSchedule"
-        effect: "NoSchedule"
-      - key: "taint-key"
-        operator: "Exists"
+        value: "db"
         effect: "NoSchedule"
       affinity:
         nodeAffinity:

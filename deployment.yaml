@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
-  namespace: tainted
+  name: mods-tolerations
+  namespace: minhtao
 spec:
   replicas: 3
   selector:
@@ -13,27 +13,25 @@ spec:
       labels:
         app: mods-3
     spec:
-      containers:
-      - name: mods-3
-        image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
-        ports:
-        - containerPort: 8080
       tolerations:
       - key: "taint-key"
         operator: "Equal"
-        taint-value: "NoSchedule"
+        value: "NoSchedule"
         effect: "NoSchedule"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mods-3
-  namespace: tainted
-spec:
-  selector:
-    app: mods-3
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
-  type: ClusterIP
+      - key: "taint-key"
+        operator: "Exists"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - devopsteam-minhkq-k8s-mods-3
+      containers:
+      - name: mods-3
+        image: nginx:latest
+        ports:
+        - containerPort: 80

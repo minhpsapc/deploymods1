@@ -12,13 +12,14 @@ spec:
     metadata:
       labels:
         app: mods-3
+      annotations:  # Thêm phần annotations nếu cần
+        workload: "production-1"
     spec:
       tolerations:
       - key: "app"
         operator: "Equal"
         value: "db"
         effect: "NoSchedule"
-       workload: production-1
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

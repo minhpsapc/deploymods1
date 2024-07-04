@@ -4,7 +4,7 @@ metadata:
   name: mods-deployment
   namespace: doan123
 spec:
-  replicas: 5
+  replicas: 4
   selector:
     matchLabels:
       app: mods-taints
@@ -18,15 +18,6 @@ spec:
           operator: "Equal"
           value: "frontend"
           effect: "NoSchedule"
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: workload
-                    operator: In
-                    values:
-                      - production-1
       containers:
         - name: mods-taints
           image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest

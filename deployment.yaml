@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mods-deployment
-  namespace: minh123
+  namespace: minh2002
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
       app: mods
@@ -13,28 +13,13 @@ spec:
       labels:
         app: mods
     spec:
+      tolerations:  # Đây là nơi để đưa tolerations
+        - key: "app"         # Key của taint mà toleration áp dụng
+          operator: "Equal"   # Phép toán so sánh (Equal, Exists, ...)
+          value: "frontend"   # Giá trị của taint
+          effect: "NoSchedule"  # Tác động của taint (NoSchedule, PreferNoSchedule, NoExecute)
       containers:
-      - name: mods
-        image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
-        ports:
-        - containerPort: 8080
-      tolerations:  # Đưa tolerations vào đây
-        - key: "app"
-          operator: "Equal"
-          value: "frontend"
-          effect: "NoSchedule"
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mods
-  namespace: minh123
-spec:
-  selector:
-    app: mods
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
-  type: ClusterIP
+        - name: mods
+          image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
+          ports:
+            - containerPort: 8080

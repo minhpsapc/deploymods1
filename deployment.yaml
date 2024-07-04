@@ -27,7 +27,6 @@ spec:
                     operator: In
                     values:
                       - production-1
-                      - ssd
       containers:
         - name: mods-taints
           image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest

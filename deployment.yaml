@@ -13,20 +13,19 @@ spec:
       labels:
         app: mods-taints
     spec:
-      tolerations:  # Đây là nơi để đưa tolerations
-        - key: "app"         # Key của taint mà toleration áp dụng
-          operator: "Equal"   # Phép toán so sánh (Equal, Exists, ...)
-          value: "frontend"   # Giá trị của taint
-          effect: "NoSchedule"  # Tác động của taint (NoSchedule, PreferNoSchedule, NoExecute)
+      tolerations:
+        - key: "app"
+          operator: "Equal"
+          value: "frontend"
+          effect: "NoSchedule"
       containers:
         - name: mods-taints
           image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
           ports:
             - containerPort: 8080
- nodeSelector:
-        ## This label is used to deploy the pod on matching nodes
-        workload: production-1
-        disk=ssd
+  nodeSelector:
+    workload: production-1
+    disk: ssd
 ---
 apiVersion: v1
 kind: Service

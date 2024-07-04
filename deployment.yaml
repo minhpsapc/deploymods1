@@ -13,11 +13,6 @@ spec:
       labels:
         app: mods-taints
     spec:
-      tolerations:
-        - key: "app"
-          operator: "Equal"
-          value: "frontend"
-          effect: "NoSchedule"
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

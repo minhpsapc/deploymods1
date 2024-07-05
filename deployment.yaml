@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mods-1-deployment
-  namespace: minhtao2
+  namespace: nodeaffinity1
 spec:
   replicas: 1
   selector:
@@ -23,17 +23,18 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: workload
+              - key: disk
                 operator: In
                 values:
-                - production-1
+                - ssd
+                - hdd
                 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: mods-2
-  namespace: minhtao2
+  namespace: nodeaffinity1
 spec:
   selector:
     app: mods-2

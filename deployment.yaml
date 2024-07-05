@@ -19,9 +19,8 @@ spec:
         ports:
         - containerPort: 8080
       nodeSelector:
-        ## This label is used to deploy the pod on matching nodes
-        size:large
-        disk:ssd
+        size: large
+        disk: ssd
 ---
 apiVersion: v1
 kind: Service

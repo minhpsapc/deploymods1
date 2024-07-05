@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-selector-deployment
+  name: mods-selector-deployment
   namespace: nodeselector123
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: mods-selector
@@ -19,10 +19,8 @@ spec:
         ports:
         - containerPort: 8080
       nodeSelector:
+        size: large
         disk: ssd
-        
-        
-
 ---
 apiVersion: v1
 kind: Service

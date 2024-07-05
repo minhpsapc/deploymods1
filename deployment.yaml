@@ -1,20 +1,21 @@
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
-  name: my-daemonset
+  name: mods-1-deployment
   namespace: nodeaffinity1
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: my-app
+      app: mods-2
   template:
     metadata:
       labels:
-        app: my-app
+        app: mods-2
     spec:
       containers:
-      - name: my-app
-        image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/my-app:latest
+      - name: mods-2
+        image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
         ports:
         - containerPort: 8080
       affinity:

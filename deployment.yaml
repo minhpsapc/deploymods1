@@ -1,37 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mods-deployment
-  namespace: taints123
+  name: mods-selector-deployment
+  namespace: nodeselector123
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
-      app: mods-taints
+      app: mods-selector
   template:
     metadata:
       labels:
-        app: mods-taints
+        app: mods-selector
     spec:
-      tolerations:  # Đây là nơi để đưa tolerations
-        - key: "app"         # Key của taint mà toleration áp dụng
-          operator: "Equal"   # Phép toán so sánh (Equal, Exists, ...)
-          value: "mods"   # Giá trị của taint
-          effect: "NoSchedule"  # Tác động của taint (NoSchedule, PreferNoSchedule, NoExecute)
       containers:
-        - name: mods-taints
-          image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
-          ports:
-            - containerPort: 8080
+      - name: mods-selector
+        image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
+        ports:
+        - containerPort: 8080
+      nodeSelector:
+        ## This label is used to deploy the pod on matching nodes
+        size:large
+        disk:ssd
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mods-taints
-  namespace: minh-test
+  name: mods-selector
+  namespace: nodeselector123
 spec:
   selector:
-    app: mods-taints
+    app: mods-selector
   ports:
     - protocol: TCP
       port: 8080

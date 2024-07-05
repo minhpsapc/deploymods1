@@ -4,7 +4,7 @@ metadata:
   name: mods-selector-deployment
   namespace: nodeselector123
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: mods-selector
@@ -19,9 +19,9 @@ spec:
         ports:
         - containerPort: 8080
       nodeSelector:
-        disk: hdd
+        size: small
         size: large
-        disk: ssd
+        
 
 ---
 apiVersion: v1

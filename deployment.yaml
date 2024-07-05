@@ -4,7 +4,7 @@ metadata:
   name: mods-deployment
   namespace: taints123
 spec:
-  replicas: 4
+  replicas: 3
   selector:
     matchLabels:
       app: mods-taints
@@ -31,7 +31,7 @@ metadata:
   namespace: minh-test
 spec:
   selector:
-    app: mods-1
+    app: mods-taints
   ports:
     - protocol: TCP
       port: 8080

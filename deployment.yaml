@@ -4,7 +4,7 @@ metadata:
   name: mods1-deployment
   namespace: taints22
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: mods-taints

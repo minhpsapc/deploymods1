@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mods1-deployment
-  namespace: taints22
+  namespace: taint2
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: mods-taints
@@ -28,7 +28,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mods-taints
-  namespace: taints22
+  namespace: taint2
 spec:
   selector:
     app: mods-taints

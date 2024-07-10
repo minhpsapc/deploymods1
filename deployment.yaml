@@ -1,37 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mods1-deployment
-  namespace: taint2
+  name: mods-1-deployment
+  namespace: nodeaffi22
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
-      app: mods-taints
+      app: mods-2
   template:
     metadata:
       labels:
-        app: mods-taints
+        app: mods-2
     spec:
-      tolerations:  # Đây là nơi để đưa tolerations
-        - key: "app"         # Key của taint mà toleration áp dụng
-          operator: "Equal"   # Phép toán so sánh (Equal, Exists, ...)
-          value: "db"   # Giá trị của taint
-          effect: "NoSchedule"  # Tác động của taint (NoSchedule, PreferNoSchedule, NoExecute)
       containers:
-        - name: mods-taints
+        - name: mods-2
           image: africa-south1-docker.pkg.dev/doantotnghiep-426507/doantotnghiep-repo/mods:latest
           ports:
             - containerPort: 8080
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: disk
+                    operator: In
+                    values:
+                      - ssd
+                      - hdd
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mods-taints
-  namespace: taint2
+  name: mods-2
+  namespace: nodeaffi22
 spec:
   selector:
-    app: mods-taints
+    app: mods-2
   ports:
     - protocol: TCP
       port: 8080
